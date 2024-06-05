@@ -2,10 +2,11 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Barang;
 use App\Models\BarangMasuk;
+use App\Models\BarangKeluar;
+use App\Models\Barang;
+
 use Illuminate\Http\Request;
-use DB;
 
 class BarangMasukController extends Controller
 {
@@ -24,18 +25,30 @@ class BarangMasukController extends Controller
     
     public function store(Request $request)
     {
-        $this->validate($request, [
-            'tgl_masuk'     => 'required',
+        $request->validate([
+            'tgl_masuk'     => 'required|date',
             'qty_masuk'     => 'required|numeric|min:1',
-            'barang_id'     => 'required',
+            'barang_id'     => 'required|exists:barang,id',
         ]);
-        //create post
+    
+        $tgl_masuk = $request->tgl_masuk;
+        $barang_id = $request->barang_id;
+    
+        // Check if there's any BarangKeluar with a date earlier than tgl_masuk
+        $existingBarangKeluar = BarangKeluar::where('barang_id', $barang_id)
+            ->where('tgl_keluar', '<', $tgl_masuk)
+            ->exists();
+    
+        if ($existingBarangKeluar) {
+            return redirect()->back()->withInput()->withErrors(['tgl_masuk' => 'Tanggal masuk tidak boleh melebihi tanggal keluar!']);
+        }
+    
         BarangMasuk::create([
-            'tgl_masuk'        => $request->tgl_masuk,
-            'qty_masuk'        => $request->qty_masuk,
-            'barang_id'        => $request->barang_id,
+            'tgl_masuk'  => $tgl_masuk,
+            'qty_masuk'  => $request->qty_masuk,
+            'barang_id'  => $barang_id,
         ]);
-
+    
         return redirect()->route('barangmasuk.index')->with(['success' => 'Data Berhasil Disimpan!']);
     }
 
@@ -65,21 +78,33 @@ class BarangMasukController extends Controller
 
     public function update(Request $request, $id)
     {
-
-        $this->validate($request, [
-            'tgl_masuk'     => 'required',
+        $request->validate([
+            'tgl_masuk'     => 'required|date',
             'qty_masuk'     => 'required|numeric|min:1',
-            'barang_id'     => 'required',
+            'barang_id'     => 'required|exists:barang,id',
         ]);
-        //create post
+    
+        $tgl_masuk = $request->tgl_masuk;
+        $barang_id = $request->barang_id;
+    
+        // Check if there's any BarangKeluar with a date earlier than tgl_masuk
+        $existingBarangKeluar = BarangKeluar::where('barang_id', $barang_id)
+            ->where('tgl_keluar', '<', $tgl_masuk)
+            ->exists();
+    
+        if ($existingBarangKeluar) {
+            return redirect()->back()->withInput()->withErrors(['tgl_masuk' => 'Tanggal masuk tidak boleh melebihi tanggal keluar!']);
+        }
+    
         $barangMasuk = BarangMasuk::findOrFail($id);
-            $barangMasuk->update([
-                'tgl_masuk' => $request->tgl_masuk,
-                'qty_masuk' => $request->qty_masuk,
-                'barang_id' => $request->barang_id,
-            ]);
-
-        return redirect()->route('barangmasuk.index')->with(['success' => 'Data Berhasil Diupdate!']);
+    
+        $barangMasuk->update([
+            'tgl_masuk'  => $tgl_masuk,
+            'qty_masuk'  => $request->qty_masuk,
+            'barang_id'  => $barang_id,
+        ]);
+    
+        return redirect()->route('barangmasuk.index')->with(['success' => 'Data Berhasil Diubah!']);
     }
 
 }

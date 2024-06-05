@@ -2,9 +2,9 @@
 
 namespace App\Http\Controllers;
 
-use App\Model\User;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+
+use Illuminate\Http\Request;
 use Illuminate\Http\RedirectResponse;
 
 class LoginController extends Controller
@@ -42,6 +42,6 @@ class LoginController extends Controller
 
         $request->session()->regenerateToken();
 
-        return redirect('/login');
+        return redirect('login');
     }
 }

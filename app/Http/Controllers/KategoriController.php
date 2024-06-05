@@ -39,24 +39,21 @@ class KategoriController extends Controller
      */
     public function store(Request $request)
     {
-        // return $request->all();
 
-        $this->validate($request, [
-            'deskripsi'   => 'required',
-            'kategori'     => 'required | in:M,A,BHP,BTHP',
+        $request->validate([
+            'deskripsi'   => 'required | unique:kategori',
+            'kategori'    => 'required | in:M,A,BHP,BTHP',
         ]);
 
-
-        //create post
+        // buat kategori baru
         Kategori::create([
             'deskripsi'  => $request->deskripsi,
-            'kategori' => $request->kategori
+	        'kategori'   => $request->kategori,
         ]);
-
-        //redirect to index
+        
+        //redirect ke kategori index
         return redirect()->route('kategori.index')->with(['success' => 'Data Berhasil Disimpan!']);
     }
-
     /**
      * Display the specified resource.
      */
@@ -94,7 +91,7 @@ class KategoriController extends Controller
     public function update(Request $request, string $id)
     {
 
-        $this->validate($request, [
+        $request->validate( [
             'deskripsi'              => 'required',
             'kategori'              => 'required',
             // 'spesifikasi'       => 'required',
@@ -119,15 +116,13 @@ class KategoriController extends Controller
      */
     public function destroy(string $id)
     {
-	if (DB::table('barang')-> where('kategori_id','$id')->exists()){
-	return redirect()->route('kategori.index')->with(['Gagal'=> 'Data gagal dihapus!']);
-
-	} else {
-	$rsetKategori = Kategori::find($id);
-	$rsetKategori ->delete();
-	return redirect()->route('kategori.index')->with(['success'=> 'Data berhasil dihapus!']);
-	}
-
+        if (DB::table('barang')->where('kategori_id', $id)->exists()){
+            return redirect()->route('kategori.index')->with(['gagal' => 'Data Gagal Dihapus! Data masih digunakan']);            
+        } else {
+        $rsetKategori = Kategori::find($id);
+        $rsetKategori->delete();
+        return redirect()->route('kategori.index')->with(['success' => 'Data Berhasil Dihapus!']);
+        }
 
         //$rsetKategori = Kategori::find($id);
         //delete image

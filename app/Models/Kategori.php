@@ -15,7 +15,7 @@ class Kategori extends Model
 
     protected $fillable = ['deskripsi','kategori'];
 
-    public function ketkategorik()
+    public function ketKategorik()
     {
         switch ($this->kategori) {
             case 'M':
@@ -29,5 +29,10 @@ class Kategori extends Model
             default:
                 return 'Unknown';
         }
+    }
+
+    public static function getKategoriAll(){
+        return DB::table('kategori')
+            ->select('kategori.id','deskripsi',DB::raw('ketKategorik(kategori) as ketkategorik'));
     }
 }

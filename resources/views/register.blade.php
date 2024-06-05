@@ -65,7 +65,7 @@
                                     <button type="submit" class="btn btn-primary">Register Account</button>
                                 </div>
 
-                                <hr>
+                                <!-- <hr>
                                 <a href="index.html" class="btn btn-google btn-user btn-block">
                                     <i class="fab fa-google fa-fw"></i> Register with Google
                                 </a>
@@ -76,7 +76,7 @@
                             <hr>
                             <div class="text-center">
                                 <a class="small" href="forgot-password.html">Forgot Password?</a>
-                            </div>
+                            </div> -->
                             <div class="text-center">
                                 <a class="small" href="login.html">Already have an account? Login!</a>
                             </div>

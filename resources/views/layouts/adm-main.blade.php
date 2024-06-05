@@ -75,7 +75,7 @@
                 </div> -->
             <!-- </li> -->
 
-            <li class="nav-item active">
+            <!-- <li class="nav-item active">
                 <a class="nav-link" href="barang">
                     <i class="fa fa-briefcase" aria-hidden="true"></i>
                      <span>Barang</span>
@@ -101,7 +101,41 @@
                     <i class="fa fa-shopping-basket" aria-hidden="true"></i>
                      <span>Barang Keluar</span>
                 </a>
+            </li> -->
+
+            <li class="nav-item">
+                <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseTwo"
+                    aria-expanded="true" aria-controls="collapseTwo">
+                    <i class="fas fa-fw fa-shopping-cart"></i>
+                    <span>Data Barang</span>
+                </a>
+                <div id="collapseTwo" class="collapse" aria-labelledby="headingUtilities"
+                    data-parent="#accordionSidebar">
+                    <div class="bg-white py-2 collapse-inner rounded">
+                        <a class="collapse-item" href="{{ route('barang.index')}}">Barang</a>
+                        <a class="collapse-item" href="{{ route('kategori.index')}}">Kategori</a>
+                    </div>
+                </div>
             </li>
+
+
+            <hr class="sidebar-divider my-0">
+
+            <li class="nav-item">
+                <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseUtilities"
+                    aria-expanded="true" aria-controls="collapseUtilities">
+                    <i class="fas fa-fw fa-exchange-alt"></i>
+                    <span>Data Transaksi</span>
+                </a>
+                <div id="collapseUtilities" class="collapse" aria-labelledby="headingUtilities"
+                    data-parent="#accordionSidebar">
+                    <div class="bg-white py-2 collapse-inner rounded">
+                        <a class="collapse-item" href="{{ route('barangmasuk.index')}}">Barang Masuk</a>
+                        <a class="collapse-item" href="{{ route('barangkeluar.index')}}">Barang Keluar</a>
+                    </div>
+                </div>
+            </li>
+
 
             <!-- Divider -->
             <hr class="sidebar-divider d-none d-md-block">
