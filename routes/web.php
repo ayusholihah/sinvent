@@ -9,10 +9,6 @@ Route::get('/', function () {
     return view('login');
 });
 
-Route::resource('/kategori', \App\Http\Controllers\KategoriController::class)->middleware('auth');
-Route::resource('/barang', \App\Http\Controllers\BarangController::class)->middleware('auth');
-Route::resource('/barangmasuk', \App\Http\Controllers\BarangMasukController::class)->middleware('auth');
-Route::resource('/barangkeluar', \App\Http\Controllers\BarangKeluarController::class)->middleware('auth');
 
 //route login
 Route::get('login', [LoginController::class,'index'])->name('login')->middleware('guest');
@@ -23,6 +19,12 @@ Route::post('logout', [LoginController::class,'logout']);
 //route register
 Route::get('register', [RegisterController::class,'create']);
 Route::post('register', [RegisterController::class,'store']);
+
+Route::resource('/kategori', \App\Http\Controllers\KategoriController::class)->middleware('auth');
+Route::resource('/barang', \App\Http\Controllers\BarangController::class)->middleware('auth');
+Route::resource('/barangmasuk', \App\Http\Controllers\BarangMasukController::class)->middleware('auth');
+Route::resource('/barangkeluar', \App\Http\Controllers\BarangKeluarController::class)->middleware('auth');
+
 
 Route::get('/category',[CategoryController::class,'index']);
 Route::resource('/products', \App\Http\Controllers\ProductController::class);
