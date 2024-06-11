@@ -17,7 +17,7 @@
                             </tr>
                             <tr>
                                 <td>JENIS</td>
-                                <td>{{ $rsetKategori->ketKategori()}}</td>
+                                <td>{{ $rsetKategori->ketkategorik()}}</td>
                             </tr>
                         </table>
                     </div>

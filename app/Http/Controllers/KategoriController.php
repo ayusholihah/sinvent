@@ -11,13 +11,30 @@ class KategoriController extends Controller
 {
     public function index(Request $request)
     {
-    /**
-    * Display a listing of the resource.
-    */
+        // $rsetKategori = DB::table('kategori')
+        // ->select('id', 'deskripsi', DB::raw('ketKategorik(kategori) as ketkategorik'))
+        // ->orderBy('kategori', 'asc') // Menambahkan orderBy untuk mengurutkan berdasarkan deskripsi (kategori) secara ascending
+        // ->paginate(10);
 
-        $rsetKategori = DB::table('kategori')->select('id','deskripsi',DB::raw('ketKategorik(kategori) as ketkategori'))->paginate(10);
-        return view('view_kategori.index',compact('rsetKategori'))
-            ->with('i', (request()->input('page', 1) - 1) * 10);
+        // return view('kategori.index', compact('rsetKategori'))
+        // ->with('i', ($request->input('page', 1) - 1) * 10);
+
+        $keyword = $request->input('keyword');
+
+        // Query untuk mencari kategori berdasarkan keyword
+        $query = DB::table('kategori')
+            ->select('id', 'deskripsi', DB::raw('ketKategorik(kategori) as ketkategorik'))
+            ->orderBy('kategori', 'asc');
+    
+        if (!empty($keyword)) {
+            $query->where('deskripsi', 'LIKE', "%$keyword%")
+                  ->orWhereRaw('ketKategorik(kategori) COLLATE utf8mb4_unicode_ci LIKE ?', ["%$keyword%"]);
+        }
+    
+        $rsetKategori = $query->paginate(10);
+    
+        return view('view_kategori.index', compact('rsetKategori'))
+            ->with('i', ($request->input('page', 1) - 1) * 10);
     }
 
     /**

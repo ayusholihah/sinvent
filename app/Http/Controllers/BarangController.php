@@ -14,11 +14,25 @@ class BarangController extends Controller
 {
     public function index(Request $request)
     {
-        $rsetBarang = Barang::with('kategori')->latest()->paginate(10);
+        // $rsetBarang = Barang::with('kategori')->latest()->paginate(10);
 
-        return view('view_barang.index', compact('rsetBarang'))
-            ->with('i', (request()->input('page', 1) - 1) * 10);
+        // return view('barang.index', compact('rsetBarang'))
+        //     ->with('i', (request()->input('page', 1) - 1) * 10);
+        $keyword = $request->input('keyword');
+
+        // Query untuk mencari barang berdasarkan keyword
+        $rsetBarang = Barang::where('merk', 'LIKE', "%$keyword%")
+            ->orWhere('seri', 'LIKE', "%$keyword%")
+            ->orWhere('spesifikasi', 'LIKE', "%$keyword%")
+            ->orWhere('stok', 'LIKE', "%$keyword%")
+            ->orWhereHas('kategori', function ($query) use ($keyword) {
+                $query->where('deskripsi', 'LIKE', "%$keyword%");
+            })
+            ->paginate(10);
+    
+        return view('view_barang.index', compact('rsetBarang'));
     }
+
 
     public function create()
     {
@@ -94,9 +108,7 @@ class BarangController extends Controller
         $rsetBarang = Barang::find($id);
     
         // cek apakah qty masuk lebih besar daripada stok 
-        if ($rsetBarang->stok > 0) {
-            return redirect()->route('barang.index')->with(['error' => 'Barang dengan stok lebih dari 0 tidak dapat dihapus!']);
-        }
+        // 
     
         // cek apakah berelasi dengan barangkeluar
         $relatedBarangKeluar = BarangKeluar::where('barang_id', $id)->exists();
