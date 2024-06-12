@@ -4,6 +4,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\LoginController;
 use App\Http\Controllers\RegisterController;
 use App\Http\Controllers\CategoryController;
+use \App\Http\Controllers\DashboardController;
 
 Route::get('/', function () {
     return view('login');
@@ -11,6 +12,7 @@ Route::get('/', function () {
 
 
 //route login
+
 Route::get('login', [LoginController::class,'index'])->name('login')->middleware('guest');
 Route::post('login', [LoginController::class,'authenticate']);
 //route logout
@@ -20,6 +22,7 @@ Route::post('logout', [LoginController::class,'logout']);
 Route::get('register', [RegisterController::class,'create']);
 Route::post('register', [RegisterController::class,'store']);
 
+// Route::resource('dashboard', DashboardController::class)->middleware('auth');
 Route::resource('/kategori', \App\Http\Controllers\KategoriController::class)->middleware('auth');
 Route::resource('/barang', \App\Http\Controllers\BarangController::class)->middleware('auth');
 Route::resource('/barangmasuk', \App\Http\Controllers\BarangMasukController::class)->middleware('auth');
